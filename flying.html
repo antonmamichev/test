@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<br /><br /><br />
+<center>
+<canvas id="myCanvas" width="800" height="500" style="border:solid 1px black"></canvas>
+    </center>
+<script type="text/javascript">
+
+    stepity = 15;
+    timeOut = 1;
+
+    cW = 1000;
+    cH = 600;
+
+    pts = new Array();
+    pts[1] = { x: 10, y: 10, dx: 3, dy: 2};
+    pts[2] = { x: 500, y: 20, dx: 4, dy: 1};
+    pts[3] = { x: 50, y: 200, dx: 6, dy: 1};
+    pts[4] = { x: 400, y: 340, dx: 4, dy: 2 };    
+   
+    var canvas = document.getElementById('myCanvas');
+    canvas.width = cW;
+    canvas.height = cH;
+
+    function drawsurface() {        
+
+        var lin = canvas.getContext('2d');
+        lin.beginPath();
+        lin.moveTo(pts[1].x, pts[1].y); lin.lineTo(pts[4].x, pts[4].y); lin.lineTo(pts[3].x, pts[3].y); lin.lineTo(pts[2].x, pts[2].y); lin.lineTo(pts[1].x, pts[1].y);
+
+        sts = new Array ();
+        sts[1] = { sy: (pts[2].y - pts[1].y) / stepity, sx: (pts[2].x - pts[1].x) / stepity};
+        sts[2] = { sy: (pts[4].y - pts[3].y) / stepity, sx: (pts[4].x - pts[3].x) / stepity};
+        sts[3] = { sy: (pts[4].y - pts[1].y) / stepity, sx: (pts[4].x - pts[1].x) / stepity};
+        sts[4] = { sy: (pts[3].y - pts[2].y) / stepity, sx: (pts[3].x - pts[2].x) / stepity};        
+
+        for (i = 0; i < stepity; i++) {
+            lin.moveTo(pts[1].x + i * sts[1].sx, pts[1].y + i * sts[1].sy);
+            lin.lineTo(pts[4].x - i * sts[2].sx, pts[4].y - i * sts[2].sy);
+            lin.moveTo(pts[1].x + i * sts[3].sx, pts[1].y + i * sts[3].sy);
+            lin.lineTo(pts[2].x + i * sts[4].sx, pts[2].y + i * sts[4].sy);
+        }
+        lin.stroke();
+    }
+
+    function moveSurface() {        
+        canvas.width = canvas.width; //clean canvas
+        for (i=1;i<=4;i++)
+        {
+            pts[i].x += pts[i].dx; if (pts[i].x < 0 || pts[i].x > cW) pts[i].dx = -pts[i].dx;
+            pts[i].y += pts[i].dy; if (pts[i].y < 0 || pts[i].y > cH) pts[i].dy = -pts[i].dy;
+        }
+        drawsurface();
+        setTimeout(moveSurface, timeOut);        
+    }    
+    
+
+    moveSurface();
+        
+    
+    
+
+
+
+    
+</script>
+
